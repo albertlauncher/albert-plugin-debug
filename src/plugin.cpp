@@ -10,6 +10,7 @@
 ALBERT_LOGGING_CATEGORY("debug")
 using namespace albert;
 using namespace std;
+using namespace util;
 
 static auto icon = {QStringLiteral("qsp:SP_MessageBoxWarning")};
 
