@@ -38,7 +38,7 @@ void Plugin::handleTriggerQuery(Query &query)
                                          u"Item #%1"_s.arg(i),
                                          u"Wow, Item #%1"_s.arg(i),
                                          icon,
-                                         {{u"Debug"_s, u"Open website"_s, []() { openWebsite(); }}}));
+                                         {}));
         }
         return;
     }
