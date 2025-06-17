@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Manuel Schneider
+// Copyright (c) 2025 Manuel Schneider
 
 #include "plugin.h"
 #include <albert/albert.h>
@@ -8,12 +8,11 @@
 #include <chrono>
 #include <thread>
 ALBERT_LOGGING_CATEGORY("debug")
-using namespace Qt::Literals;
+using namespace Qt::StringLiterals;
 using namespace albert;
 using namespace std;
 using namespace util;
 
-static auto icon = {u"qsp:SP_MessageBoxWarning"_s};
 
 Plugin::Plugin() { DEBG << "'Debug' created."; }
 
@@ -25,6 +24,8 @@ bool Plugin::allowTriggerRemap() const { return false; }
 
 void Plugin::handleTriggerQuery(Query &query)
 {
+    static const QStringList icon = {u"qsp:SP_MessageBoxWarning"_s};
+
     if (query.string() == u"busy"_s)
     {
         for(int i = 0; query.isValid() && i < 3; ++i)
@@ -34,31 +35,36 @@ void Plugin::handleTriggerQuery(Query &query)
                     return;
                 this_thread::sleep_for(chrono::milliseconds(10));
             }
-            query.add(StandardItem::make({},
+            query.add(StandardItem::make(u"debug"_s,
                                          u"Item #%1"_s.arg(i),
                                          u"Wow, Item #%1"_s.arg(i),
-                                         icon,
-                                         {}));
+                                         icon));
         }
         return;
     }
 
     if (u"notification"_s.startsWith(query.string()))
     {
-        query.add(StandardItem::make({},
+        query.add(StandardItem::make(u"debug"_s,
                                      u"Memleaking notification"_s,
                                      u"Leaks memory"_s,
                                      icon,
-                                     {{u"Debug"_s, u"Open website"_s, [] {
+                                     {{u"Debug"_s, u"Open website"_s,
+                                       [] {
                                            auto *n = new Notification;
                                            n->setTitle(u"Memory leak"_s);
                                            n->setText(u"Ok."_s);
                                            n->send();
-                                       }}}));
+                                       }}}
+                                     )
+                  );
     }
 
     if (u"busy"_s.startsWith(query.string()))
     {
-        query.add(StandardItem::make({}, u"busy"_s, u"Test delayed queries"_s, u"busy"_s, icon, {}));
+        query.add(StandardItem::make(u"debug"_s,
+                                     u"busy"_s,
+                                     u"Test delayed queries"_s,
+                                     icon));
     }
 }
