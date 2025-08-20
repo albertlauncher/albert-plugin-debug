@@ -1,1 +1,1 @@
-# albert-plugin-debug
+# Albert plugin: Debug
