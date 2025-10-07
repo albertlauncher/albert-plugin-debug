@@ -2,6 +2,7 @@
 
 #include "plugin.h"
 #include <albert/albert.h>
+#include <albert/iconutil.h>
 #include <albert/logging.h>
 #include <albert/notification.h>
 #include <albert/standarditem.h>
@@ -9,9 +10,9 @@
 #include <thread>
 ALBERT_LOGGING_CATEGORY("debug")
 using namespace Qt::StringLiterals;
+using namespace albert::util;
 using namespace albert;
 using namespace std;
-using namespace util;
 
 
 Plugin::Plugin() { DEBG << "'Debug' created."; }
@@ -22,10 +23,10 @@ QString Plugin::synopsis(const QString &) const { return u"debug-debug-debug"_s;
 
 bool Plugin::allowTriggerRemap() const { return false; }
 
+static auto makeIcon() { return makeStandardIcon(MessageBoxWarning); }
+
 void Plugin::handleTriggerQuery(Query &query)
 {
-    static const QStringList icon = {u"qsp:SP_MessageBoxWarning"_s};
-
     if (query.string() == u"busy"_s)
     {
         for(int i = 0; query.isValid() && i < 3; ++i)
@@ -38,7 +39,7 @@ void Plugin::handleTriggerQuery(Query &query)
             query.add(StandardItem::make(u"debug"_s,
                                          u"Item #%1"_s.arg(i),
                                          u"Wow, Item #%1"_s.arg(i),
-                                         icon));
+                                         makeIcon));
         }
         return;
     }
@@ -48,7 +49,7 @@ void Plugin::handleTriggerQuery(Query &query)
         query.add(StandardItem::make(u"debug"_s,
                                      u"Memleaking notification"_s,
                                      u"Leaks memory"_s,
-                                     icon,
+                                     makeIcon,
                                      {{u"Debug"_s, u"Open website"_s,
                                        [] {
                                            auto *n = new Notification;
@@ -65,6 +66,6 @@ void Plugin::handleTriggerQuery(Query &query)
         query.add(StandardItem::make(u"debug"_s,
                                      u"busy"_s,
                                      u"Test delayed queries"_s,
-                                     icon));
+                                     makeIcon));
     }
 }
