@@ -1,18 +1,22 @@
 // Copyright (c) 2025 Manuel Schneider
 
 #include "plugin.h"
+#include <QCoroGenerator>
 #include <albert/app.h>
-#include <albert/iconutil.h>
+#include <albert/icon.h>
 #include <albert/logging.h>
 #include <albert/notification.h>
 #include <albert/standarditem.h>
-#include <QCoroGenerator>
 #include <chrono>
 #include <thread>
 ALBERT_LOGGING_CATEGORY("debug")
 using namespace Qt::StringLiterals;
 using namespace albert;
 using namespace std;
+
+namespace {
+static auto makeIcon() { return Icon::standard(Icon::MessageBoxWarning); }
+}
 
 Plugin::Plugin() { DEBG << "'Debug' created."; }
 
@@ -21,8 +25,6 @@ Plugin::~Plugin() { DEBG << "'Debug' destroyed."; }
 QString Plugin::synopsis(const QString &) const { return u"debug-debug-debug"_s; }
 
 bool Plugin::allowTriggerRemap() const { return false; }
-
-static auto makeIcon() { return makeStandardIcon(MessageBoxWarning); }
 
 ItemGenerator Plugin::items(albert::QueryContext &ctx)
 {
