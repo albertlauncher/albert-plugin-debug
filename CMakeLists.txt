@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(debug VERSION 0.0.1)
+project(debug VERSION 0.0.2)
 
 find_package(Albert REQUIRED)
 find_package(QCoro6 REQUIRED COMPONENTS Coro)
